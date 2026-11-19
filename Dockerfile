@@ -18,7 +18,9 @@ RUN mvn package -DskipTests
 
 # Used to analyze dependencies bacause jdeps from JDK 17 has a bug
 # https://stackoverflow.com/questions/69943899/jdeps-cant-print-module-deps-due-to-a-multireleaseexception
-FROM amazoncorretto:21.0.11-alpine as deps
+# Floating tag on purpose: Corretto has no 21.0.13.1 tag, and 21.0.13 and older have the Java4Shell (CVE-2026-114938) Base64 bug.
+# This stage is jlinked into the runtime image. Pin again once a tag at or above 21.0.13.1 exists.
+FROM amazoncorretto:21-alpine as deps
 
 # required for strip-debug to work
 RUN apk add --no-cache binutils
